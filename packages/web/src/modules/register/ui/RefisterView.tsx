@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as yup from "yup";
 import {
   Form, Icon, Input, Button
 } from 'antd';
@@ -15,12 +16,15 @@ interface Props {
 
 class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   render() {
-    const { values, handleChange, handleBlur, handleSubmit } = this.props;
+    const { values, handleChange, handleBlur, handleSubmit, touched, errors } = this.props;
 
     return (
       <form onSubmit={handleSubmit} style={{ display: 'flex', justifyContent: 'center' }}>
         <div className="login-form" style={{ width: 400 }}>
-          <Form.Item>
+          <Form.Item 
+            help={touched.email && errors.email || ''}
+            validateStatus={touched.email && errors.email ? 'error' : ''}
+          >
             <Input
               name="email"
               value={values.email}
@@ -30,7 +34,10 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
               onBlur={handleBlur}
             />
           </Form.Item>
-          <Form.Item>
+          <Form.Item
+            help={touched.password && errors.password || ''}
+            validateStatus={touched.password && errors.password ? 'error' : ''}
+          >
             <Input
               name="password"
               value={values.password}
@@ -58,7 +65,30 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   }
 }
 
+export const duplicateEmail = "already taken";
+export const emailNotLongEnough = "email must be at least 3 characters";
+export const passwordNotLongEnough = "password must be at least 3 characters";
+export const invalidEmail = "email must be a valid email";
+
+export const registerPasswordValidation = yup
+  .string()
+  .min(3, passwordNotLongEnough)
+  .max(255)
+  .required();
+
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .min(3, emailNotLongEnough)
+    .max(255)
+    .email(invalidEmail)
+    .required(),
+  password: registerPasswordValidation
+});
+
 export const RegisterView = withFormik<Props, FormValues>({
+  validationSchema,
+  validateOnChange: false,
   mapPropsToValues: () => ({
     email: '',
     password: ''
