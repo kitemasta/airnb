@@ -12,7 +12,10 @@
     "react-dom": "^16.8.6"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc"
+    "build": "rm -rf ./dist && tsc",
+    "introspect": "apollo-codegen introspect-schema http://localhost:4000 --output schema.json",
+    "generate": "apollo-codegen generate src/**/*.tsx --schema schema.json --target typescript --output src/operation-result-types.ts",
+    "gen-types": "rm -rf ./src/operation-result-types.ts && npm run introspect && npm run generate"
   },
   "devDependencies": {
     "@types/node": "^11.13.0",
