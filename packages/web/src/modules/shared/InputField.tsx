@@ -7,7 +7,7 @@ export const InputField: React.SFC<FieldProps<any> & { prefix: React.ReactNode }
   form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   ...props
 }) => {
-
+  console.log(touched, errors)
   const errorMsg = touched[field.name] && errors[field.name];
   
   return (

@@ -26,6 +26,7 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
           />
           <Field
             name="password"
+            type="password"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="Password"
             component={InputField}
@@ -34,6 +35,7 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
             <a className="login-form-forgot" href="">Forgot password</a>
           </Form.Item>
           <Form.Item>
+            // @ts-ignore
             <Button type="primary" htmlType="submit" className="login-form-button">
               Register
             </Button>
@@ -50,7 +52,6 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
 
 export const RegisterView = withFormik<Props, FormValues>({
   validationSchema: validUserSchema,
-  validateOnChange: false,
   mapPropsToValues: () => ({
     email: '',
     password: ''
