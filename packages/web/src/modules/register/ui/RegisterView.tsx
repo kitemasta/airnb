@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Form, Icon, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { withFormik, FormikErrors, FormikProps, Field, Form as FForm } from 'formik';
+import { withFormik, FormikProps, Field, Form as FForm } from 'formik';
 import { validUserSchema } from '@abb/common';
 import { InputField } from '../../shared/InputField';
+import { NormalizedErrorMap } from '@abb/controller';
 
 interface FormValues {
   email: string;
@@ -11,7 +12,7 @@ interface FormValues {
 }
 
 interface Props {
-  submit: (values: FormValues) => Promise<FormikErrors<FormValues> | null>;
+  submit: (values: FormValues) => Promise<NormalizedErrorMap | null>;
 }
 
 class C extends React.PureComponent<FormikProps<FormValues> & Props> {
@@ -33,10 +34,9 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
             component={InputField}
           />
           <Form.Item>
-            <a className="login-form-forgot" href="">Forgot password</a>
+            <Link to="/forgot-password">Forgot password</Link>
           </Form.Item>
           <Form.Item>
-            // @ts-ignore
             <Button type="primary" htmlType="submit" className="login-form-button">
               Register
             </Button>
