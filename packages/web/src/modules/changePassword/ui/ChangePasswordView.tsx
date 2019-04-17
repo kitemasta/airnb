@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { Form, Icon, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { NormalizedErrorMap, ForgotPasswordChangeMutationVariables } from '@abb/controller';
+import { changePasswordSchema } from '@abb/common';
 import { withFormik, FormikProps, Field, Form as FForm } from 'formik';
-import { validUserSchema } from '@abb/common';
 import { InputField } from '../../shared/InputField';
-import { NormalizedErrorMap } from '@abb/controller';
 
 interface FormValues {
-  email: string;
-  password: string;
+  newPassword: string;
 }
 
 interface Props {
   onFinish: () => void;
-  submit: (values: FormValues) => Promise<NormalizedErrorMap | null>;
+  token: string;
+  submit: (values: ForgotPasswordChangeMutationVariables) => Promise<NormalizedErrorMap | null>;
 }
 
 class C extends React.PureComponent<FormikProps<FormValues> & Props> {
@@ -22,28 +21,16 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
       <FForm style={{ display: 'flex', justifyContent: 'center' }}>
         <div className="login-form" style={{ width: 400 }}>
           <Field
-            name="email"
-            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Email"
-            component={InputField}
-          />
-          <Field
-            name="password"
+            name="newPassword"
             type="password"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Password"
+            placeholder="New Password"
             component={InputField}
           />
           <Form.Item>
-            <Link to="/forgot-password">Forgot password</Link>
-          </Form.Item>
-          <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
-              Register
+              Change Password
             </Button>
-          </Form.Item>
-          <Form.Item>
-            Or <Link to="/login">login now!</Link>
           </Form.Item>
         </div>
       </FForm>
@@ -52,14 +39,13 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
 }
 
 
-export const RegisterView = withFormik<Props, FormValues>({
-  validationSchema: validUserSchema,
+export const ChangePasswordView = withFormik<Props, FormValues>({
+  validationSchema: changePasswordSchema,
   mapPropsToValues: () => ({
-    email: '',
-    password: ''
+    newPassword: ''
   }),
-  handleSubmit: async (values, { props, setErrors, setSubmitting }) => {
-    const errors = await props.submit(values)
+  handleSubmit: async ({ newPassword }, { props, setErrors, setSubmitting }) => {
+    const errors = await props.submit({ newPassword, key: props.token})
     if (errors) {
       setErrors(errors);
     } else {
