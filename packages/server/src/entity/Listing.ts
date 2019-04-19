@@ -18,6 +18,8 @@ export class Listing extends BaseEntity {
 
   @Column("varchar", { length: 255, nullable: true }) description: string;
 
+  @Column("varchar", { length: 255, nullable: true }) category: string;
+
   @Column("int", { nullable: true }) price: number;
 
   @Column("int", { nullable: true }) beds: number;
@@ -30,7 +32,7 @@ export class Listing extends BaseEntity {
 
   @Column("text", { array: true, nullable: true }) amenities: string[];
 
-  @Column("uuid") ownerId: string;
+  @Column("uuid", { nullable: true }) ownerId: string;
 
   @ManyToOne(() => User, user => user.listings)
   @JoinColumn({ name: 'ownerId' })
